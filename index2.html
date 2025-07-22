@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intersection observer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            height: 2000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .box-container {
+            position: relative;
+            width: 100%;
+        }
+
+        #box {
+            background-color: rgb(40 40 190 / 100%);
+            border: 4px solid rgb(20 20 120);
+            width: 350px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transform: translateX(-100%); /* Начальное положение слева */
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .box-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .box-hidden {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        .vertical {
+            color: white;
+            font: 32px "Arial";
+        }
+    </style>
+</head>
+<body>
+    <div class="box-container">
+        <div id="box">
+            <div class="vertical">Welcome to <strong>The Box!</strong></div>
+        </div>
+    </div>
+
+    <script>
+        const boxElement = document.querySelector('#box');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    // При входе в зону видимости
+                    entry.target.classList.add('box-visible');
+                    entry.target.classList.remove('box-hidden');
+                } else {
+                    // При выходе из зоны видимости
+                    entry.target.classList.remove('box-visible');
+                    entry.target.classList.add('box-hidden');
+                }
+            });
+        }, {
+            threshold: 0.5
+        });
+
+        observer.observe(boxElement);
+    </script>
+</body>
+</html>
