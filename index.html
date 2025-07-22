@@ -13,7 +13,7 @@ body {
   min-height: 100vh;
   height: 2000px;
 }
-#box {
+#boxLeft {
   background-color: rgb(40, 190, 48);
   border: 4px solid rgb(32, 120, 20);
   width: 350px;
@@ -27,7 +27,20 @@ body {
   transform: translateX(-100%);
   transition: transform 1s ease-out;
 }
+#boxRight {
+  background-color: rgb(190, 162, 40);
+  border: 4px solid rgb(120, 118, 20);
+  width: 350px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 
+  /* Добавляем начальное смещение и плавный переход */
+  transform: translateX(100%);
+  transition: transform 1s ease-out;
+}
 .vertical {
   color: white;
   font: 32px "Arial";
@@ -44,18 +57,23 @@ body {
 </style>
 </head>
 <body>
-<div id="box">
+<div id="boxLeft">
   <div class="vertical">Welcome to <strong>The Parallelepiped!</strong></div>
+</div>
+<div id="boxRight">
+  <div class="vertical">And some one <strong>The  Parallelepiped!</strong></div>
 </div>
 
 <script>
 const numSteps = 20.0;
 let boxElement;
+let boxSomeElement;
 let prevRatio = 0.0;
 
 // При загрузке
 window.addEventListener("load", () => {
-  boxElement = document.querySelector("#box");
+  boxElement = document.querySelector("#boxLeft");
+  boxSomeElement = document.querySelector("#boxRight");
   createObserver();
 }, false);
 
@@ -68,6 +86,7 @@ function createObserver() {
 
   const observer = new IntersectionObserver(handleIntersect, options);
   observer.observe(boxElement);
+  observer.observe(boxSomeElement);
 }
 
 function buildThresholdList() {
@@ -87,9 +106,11 @@ function handleIntersect(entries, observer) {
     // Когда блок появляется — двигаем его вправо
     if (ratio > 0) {
       boxElement.style.transform = `translateX(0)`;
+      boxSomeElement.style.transform = `translateX(0)`;
     } else {
       // Когда исчезает — возвращаем влево
       boxElement.style.transform = `translateX(-100%)`;
+      boxSomeElement.style.transform = `translateX(100%)`;
     }
 
     prevRatio = ratio;
